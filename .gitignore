@@ -1,15 +1,19 @@
-# Python virtual environment
-backend/venv/
+# Python virtual environment and caches
+**/__pycache__/
+**/*.pyc
+venv/
+.env
 backend/.env
-backend/__pycache__/
-backend/*.pyc
-
-# Node dependencies and build files
-frontend/node_modules/
-frontend/dist/
 frontend/.env
 frontend/.env.local
+
+# Node dependencies and build files
+node_modules/
+**/node_modules/
+dist/
+**/dist/
 
 # OS files
 .DS_Store
 Thumbs.db
+*.log
