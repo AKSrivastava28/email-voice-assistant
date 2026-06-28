@@ -101,13 +101,21 @@ def generate_email_draft(transcript: str, contacts: Optional[dict] = None) -> Em
         client = Groq(api_key=api_key)
         logger.info(f"Using Groq model '{settings.GROQ_MODEL}' with JSON response format...")
         
+        contacts_str = ""
+        if contacts:
+            contacts_str = "\n".join([f"- {name.lower().strip()}: {email.strip()}" for name, email in contacts.items()])
+        else:
+            contacts_str = "(No contacts configured)"
+        
         system_instruction = (
-            "You are a professional email assistant. You MUST extract email information from the spoken input. "
-            "Your output must be a single, valid JSON object containing exactly three keys:\n"
-            '1. "recipient": The recipient\'s email address or name (string, or empty string if not mentioned).\n'
-            '2. "subject": A professional, concise subject line (string).\n'
-            '3. "body": The complete, polished email body (string, professional and grammatically correct).\n'
-            "Do NOT include any markdown code blocks, backticks, or extra text. Return raw JSON."
+            "You are a professional email assistant. You MUST extract email information from the spoken input.\n\n"
+            "User's Personal Contacts Directory:\n"
+            f"{contacts_str}\n\n"
+            "INSTRUCTIONS:\n"
+            "1. Resolve the recipient: If the spoken transcript mentions a name or alias that exists in the Contacts Directory above (e.g. 'tushar', 'ananya', 'wonder'), you MUST return the corresponding email address as the 'recipient'.\n"
+            "2. If no matching alias exists but they spelled out an email, clean up standard transcription errors (like removing spaces) to make it a valid email format.\n"
+            "3. If no recipient is mentioned at all, return an empty string.\n"
+            "4. Your output must be a single, valid JSON object containing exactly three keys: 'recipient', 'subject', and 'body'. Do NOT include any markdown code blocks, backticks, or extra text. Return raw JSON."
         )
         
         response = client.chat.completions.create(
