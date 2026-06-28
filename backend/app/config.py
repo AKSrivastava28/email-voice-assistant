@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     
     # Model Selection (defaults)
     GEMINI_MODEL: str = "gemini-2.5-flash"
-    GROQ_MODEL: str = "llama-3.3-70b-specdec"
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
     
     # Server configuration
     HOST: str = "127.0.0.1"
