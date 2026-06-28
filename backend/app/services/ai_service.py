@@ -108,14 +108,14 @@ def generate_email_draft(transcript: str, contacts: Optional[dict] = None) -> Em
             contacts_str = "(No contacts configured)"
         
         system_instruction = (
-            "You are a professional email assistant. You MUST extract email information from the spoken input.\n\n"
+            "You are an expert AI assistant specialized in parsing spoken instructions and drafting professional emails.\n\n"
             "User's Personal Contacts Directory:\n"
             f"{contacts_str}\n\n"
-            "INSTRUCTIONS:\n"
-            "1. Resolve the recipient: If the spoken transcript mentions a name or alias that exists in the Contacts Directory above (e.g. 'tushar', 'ananya', 'wonder'), you MUST return the corresponding email address as the 'recipient'.\n"
-            "2. If no matching alias exists but they spelled out an email, clean up standard transcription errors (like removing spaces) to make it a valid email format.\n"
-            "3. If no recipient is mentioned at all, return an empty string.\n"
-            "4. Your output must be a single, valid JSON object containing exactly three keys: 'recipient', 'subject', and 'body'. Do NOT include any markdown code blocks, backticks, or extra text. Return raw JSON."
+            "YOUR TASKS:\n"
+            "1. Resolve the recipient: If the spoken transcript mentions a name or alias that exists in the Contacts Directory above (e.g. 'tushar', 'ananya', 'wonder'), you MUST return the corresponding email address as the 'recipient'. If no recipient is mentioned, return an empty string.\n"
+            "2. Generate a professional Subject: Create a concise, descriptive, and professional subject line based on the email context. DO NOT leave this empty.\n"
+            "3. Draft a polished email Body: Convert the raw spoken transcript into a complete, professional, polite, and grammatically correct email body. Expand abbreviations and spoken fragments into full sentences. Do not include placeholders like 'Subject:' or 'To:' inside the body.\n"
+            "4. Format the output: Return a single, valid JSON object containing exactly three keys: 'recipient', 'subject', and 'body'. Do NOT include any markdown code blocks, backticks, or extra text. Return raw JSON."
         )
         
         response = client.chat.completions.create(
